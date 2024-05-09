@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:puc_minas/app/core/componentes/product_card.dart';
 import 'package:puc_minas/app/core/constants/app_routes.dart';
 import 'package:puc_minas/app/core/models/product_model.dart';
 import 'package:puc_minas/app/features/home/home_controller.dart';
@@ -12,7 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   List<ProductModel> products = [];
 
   @override
@@ -35,17 +34,31 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async{
+        onPressed: () async {
           var product = await Navigator.of(context).pushNamed(AppRoutes.add);
 
-          if (product != null){
-            products.add(products as ProductModel);
+          if (product != null) {
+            products.add(product as ProductModel);
+            setState(() {});
           }
         },
         backgroundColor: Colors.green,
         child: const Icon(Icons.add, color: Colors.white),
       ),
-      body: Container(),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            products.isEmpty
+                ? const Center(child: Text('Nenhum produto'))
+                : ListView.builder(
+                    itemBuilder: (context, index) => ProductCard(product: products[index]),
+                    shrinkWrap: true,
+                    itemCount: products.length,
+                  ),
+          ],
+        ),
+      ),
     );
   }
 }
